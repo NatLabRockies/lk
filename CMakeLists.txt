@@ -89,7 +89,16 @@ if (UNIX)
     endif ()
 else ()
     set(wxWidgets_ROOT_DIR $ENV{WXMSW3})
+    # This ensures that find_package will look for release configurations of libraries.
+    # does nothing 
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
+    set(CMAKE_MAP_IMPORTED_CONFIG_RELEASE Release)
+    set(CMAKE_MAP_IMPORTED_CONFIG_DEBUG Release)
+    set(CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBUGINFO Release)
     find_package(wxWidgets REQUIRED qa webview aui richtext html propgrid adv net stc core base scintilla)
+        # For a specific imported target, e.g., MyLibrary::MyLibrary
+        # need 3.27 or higher for wxWidgets::wxWidgets
+    set_property(TARGET wxWidgets::wxWidgets PROPERTY MAP_IMPORTED_CONFIG_DEBUG Release)
 endif ()
 
 include(${wxWidgets_USE_FILE})
@@ -151,5 +160,10 @@ if (NOT SAM_SKIP_TOOLS)
         target_link_libraries(lk_sandbox -ldl)
     endif ()
 
+    set_property(TARGET wxWidgets::wxWidgets PROPERTY MAP_IMPORTED_CONFIG_DEBUG Release)
+
+    string(REPLACE "d" "" wxWidgets_LIBRARIES "${wxWidgets_LIBRARIES}")
+
     target_link_libraries(lk_sandbox lk ${wxWidgets_LIBRARIES})
+#    target_link_libraries(lk_sandbox lk wxWidgets::wxWidgets)
 endif()
