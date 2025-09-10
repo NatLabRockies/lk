@@ -82,22 +82,39 @@ endif (MSVC)
 if (UNIX)
     if(EXISTS /usr/local/bin/wx-config-3)
         set(wxWidgets_CONFIG_EXECUTABLE /usr/local/bin/wx-config-3)
-        find_package(wxWidgets REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base)
+        find_package(wxWidgets QUIET REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base)
     else ()
         set(wxWidgets_CONFIG_EXECUTABLE $ENV{WXMSW3}/bin/wx-config)
-        find_package(wxWidgets REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base)
+        find_package(wxWidgets QUIET REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base)
     endif ()
 else ()
     set(wxWidgets_ROOT_DIR $ENV{WXMSW3})
     # This ensures that find_package will look for release configurations of libraries.
     # does nothing 
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
-    set(CMAKE_MAP_IMPORTED_CONFIG_RELEASE Release)
-    set(CMAKE_MAP_IMPORTED_CONFIG_DEBUG Release)
-    set(CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBUGINFO Release)
-    find_package(wxWidgets REQUIRED qa webview aui richtext html propgrid adv net stc core base scintilla)
+#    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
+#    set(CMAKE_MAP_IMPORTED_CONFIG_RELEASE Debug) - works - uses Debug libraries for Release configuration 
+#    set(CMAKE_MAP_IMPORTED_CONFIG_RELEASE Release)
+#    set(CMAKE_MAP_IMPORTED_CONFIG_DEBUG Release Release) - fails
+    set(CMAKE_MAP_IMPORTED_CONFIG_DEBUG RELEASE)
+#    set(CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBUGINFO Release)
+
+    set(wxWidgets_CONFIGURATION "Release" CACHE STRING "wxWidgets configuration to use (Debug, Release, etc.)")
+#    find_package(wxWidgets REQUIRED)
+
+    find_package(wxWidgets QUIET  REQUIRED qa webview aui richtext html propgrid adv net stc core base scintilla)
         # For a specific imported target, e.g., MyLibrary::MyLibrary
-        # need 3.27 or higher for wxWidgets::wxWidgets
+        # need cmake 3.27 or higher for wxWidgets::wxWidgets
+# check package found
+#    if (wxWidgets_FOUND)
+#        message(STATUS "Found wxWidgets (Release build): ${wxWidgets_LIBRARIES}")
+#        target_link_libraries(<YourTarget> PRIVATE wxWidgets::wxWidgets)
+#    else()
+#        message(FATAL_ERROR "Could not find wxWidgets Release build.")
+#    endif()  
+
+    if(CMAKE_BUILD_TYPE STREQUAL "Release" OR "Release" IN_LIST CMAKE_CONFIGURATION_TYPES)
+        set(WX_LIBRARIES ${wxWidgets_LIBRARIES})
+    endif()      
     set_property(TARGET wxWidgets::wxWidgets PROPERTY MAP_IMPORTED_CONFIG_DEBUG Release)
 endif ()
 
@@ -160,10 +177,49 @@ if (NOT SAM_SKIP_TOOLS)
         target_link_libraries(lk_sandbox -ldl)
     endif ()
 
-    set_property(TARGET wxWidgets::wxWidgets PROPERTY MAP_IMPORTED_CONFIG_DEBUG Release)
+#    set_property(lk_sandbox wxWidgets::wxWidgets PROPERTY MAP_IMPORTED_CONFIG_DEBUG Release)
 
-    string(REPLACE "d" "" wxWidgets_LIBRARIES "${wxWidgets_LIBRARIES}")
+#    string(REPLACE "d" "" wxWidgets_LIBRARIES "${wxWidgets_LIBRARIES}")
 
-    target_link_libraries(lk_sandbox lk ${wxWidgets_LIBRARIES})
+#    message(STATUS "wxWidgets Libraries before: ${wxWidgets_LIBRARIES}")
+#    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+#        string(REGEX MATCHALL "optimized(.*?)l" wxWidgets_Release_LIBRARIES ${wxWidgets_LIBRARIES} )
+#        string(REPLACE "optimized" "debug" wxWidgets_Release_LIBRARIES "${wxWidgets_Debug_LIBRARIES}")
+#        message(STATUS "wxWidgets Release Libraries: ${wxWidgets_Release_LIBRARIES}")
+#        target_link_libraries(lk_sandbox lk ${wxWidgets_Debug_LIBRARIES})
+#    else()
+#        target_link_libraries(lk_sandbox lk ${wxWidgets_LIBRARIES})
+#    endif()      
+
+#set(input_string "This is string1 content between string2 and then more text.")
+#set(start_string "string1")
+#set(end_string "string2")
+
+# Construct the regex pattern
+# Note the need to escape backslashes if you have special regex characters
+# within your start_string or end_string that need to be treated literally.
+#set(regex_pattern "${start_string}(.*?)${end_string}")
+
+#string(REGEX MATCHALL "${regex_pattern}" matches ${input_string})
+
+#foreach(match ${matches})
+#    message("Matched substring: ${match}")
+#endforeach()
+#    string(REPLACE "debug" "optimized" wxWidgets_LIBRARIES "${wxWidgets_LIBRARIES}")
+
 #    target_link_libraries(lk_sandbox lk wxWidgets::wxWidgets)
+    target_link_libraries(lk_sandbox lk ${wxWidgets_LIBRARIES})
+
+    get_target_property(DEBUG_LINK_LIBS lk_sandbox LINK_LIBRARIES)
+#    message("Debug Link Libraries for lk_sandbox: $<${DEBUG_LINK_LIBS}>")
+#    message("Debug Link Libraries for lk_sandbox: ${DEBUG_LINK_LIBS}")
+foreach(lib ${DEBUG_LINK_LIBS})
+    string(FIND ${lib} "NOT" INDEX)
+    string(FIND ${lib} "<" INDEX2)
+    if (INDEX GREATER_EQUAL 0 OR INDEX2 LESS 0)
+        message("lib: ${lib}")
+    endif()
+endforeach()
+
+
 endif()
