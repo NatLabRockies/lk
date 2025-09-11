@@ -249,6 +249,6 @@ if (NOT SAM_SKIP_TOOLS)
 
 #    list(JOIN WX_LIBS_LIST ";" WX_LIBS)
 #    message("Link Libraries for lk_sandbox: ${WX_LIBS}")
-    target_link_libraries(lk_sandbox lk ${WX_LIBS})
+    target_link_libraries(lk_sandbox lk ${wxWidgets_LIBRARIES})
 
 endif()
