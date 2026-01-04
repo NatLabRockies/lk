@@ -101,7 +101,7 @@ else ()
 #    set(wxWidgets_CONFIGURATION "Release" CACHE STRING "wxWidgets configuration to use (Debug, Release, etc.)")
 #    find_package(wxWidgets REQUIRED)
 #    set(CMAKE_FIND_DEBUG_MODE OFF)
-#    find_package(wxWidgets QUIET  REQUIRED qa webview aui richtext html propgrid adv net stc core base scintilla)
+    find_package(wxWidgets QUIET  REQUIRED qa webview aui richtext html propgrid adv net stc core base scintilla)
         # For a specific imported target, e.g., MyLibrary::MyLibrary
         # need cmake 3.27 or higher for wxWidgets::wxWidgets
 # check package found
@@ -118,7 +118,9 @@ else ()
 #    set_property(TARGET wxWidgets::wxWidgets PROPERTY MAP_IMPORTED_CONFIG_DEBUG Release)
 endif ()
 
-include(${wxWidgets_USE_FILE})
+if(wxWidgets_USE_FILE)
+    include(${wxWidgets_USE_FILE})
+endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${wxWidgets_CXX_FLAGS}")
 
 
