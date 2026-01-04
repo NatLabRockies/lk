@@ -89,33 +89,7 @@ if (UNIX)
     endif ()
 else ()
     set(wxWidgets_ROOT_DIR $ENV{WXMSW3})
-    # This ensures that find_package will look for release configurations of libraries.
-    # does nothing 
-#    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
-#    set(CMAKE_MAP_IMPORTED_CONFIG_RELEASE Debug) - works - uses Debug libraries for Release configuration 
-#    set(CMAKE_MAP_IMPORTED_CONFIG_RELEASE Release)
-#    set(CMAKE_MAP_IMPORTED_CONFIG_DEBUG Release Release) - fails
-#    set(CMAKE_MAP_IMPORTED_CONFIG_DEBUG RELEASE)
-#    set(CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBUGINFO Release)
-
-#    set(wxWidgets_CONFIGURATION "Release" CACHE STRING "wxWidgets configuration to use (Debug, Release, etc.)")
-#    find_package(wxWidgets REQUIRED)
-#    set(CMAKE_FIND_DEBUG_MODE OFF)
-    find_package(wxWidgets QUIET  REQUIRED qa webview aui richtext html propgrid adv net stc core base scintilla)
-        # For a specific imported target, e.g., MyLibrary::MyLibrary
-        # need cmake 3.27 or higher for wxWidgets::wxWidgets
-# check package found
-#    if (wxWidgets_FOUND)
-#        message(STATUS "Found wxWidgets (Release build): ${wxWidgets_LIBRARIES}")
-#        target_link_libraries(<YourTarget> PRIVATE wxWidgets::wxWidgets)
-#    else()
-#        message(FATAL_ERROR "Could not find wxWidgets Release build.")
-#    endif()  
-
-#    if(CMAKE_BUILD_TYPE STREQUAL "Release" OR "Release" IN_LIST CMAKE_CONFIGURATION_TYPES)
-#        set(WX_LIBRARIES ${wxWidgets_LIBRARIES})
-#    endif()      
-#    set_property(TARGET wxWidgets::wxWidgets PROPERTY MAP_IMPORTED_CONFIG_DEBUG Release)
+    find_package(wxWidgets REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base scintilla)
 endif ()
 
 if(wxWidgets_USE_FILE)
