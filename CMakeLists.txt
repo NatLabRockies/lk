@@ -87,14 +87,12 @@ if (UNIX)
         set(wxWidgets_CONFIG_EXECUTABLE $ENV{WXMSW3}/bin/wx-config)
         find_package(wxWidgets QUIET REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base)
     endif ()
-else ()
-    set(wxWidgets_ROOT_DIR $ENV{WXMSW3})
-    find_package(wxWidgets REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base scintilla)
+#else ()
+#    set(wxWidgets_ROOT_DIR $ENV{WXMSW3})
+#    find_package(wxWidgets REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base scintilla)
 endif ()
 
-if(wxWidgets_USE_FILE)
-    include(${wxWidgets_USE_FILE})
-endif()
+include(${wxWidgets_USE_FILE})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${wxWidgets_CXX_FLAGS}")
 
 
@@ -153,78 +151,6 @@ if (NOT SAM_SKIP_TOOLS)
         target_link_libraries(lk_sandbox -ldl)
     endif ()
 
-#    set_property(lk_sandbox wxWidgets::wxWidgets PROPERTY MAP_IMPORTED_CONFIG_DEBUG Release)
-
-#    string(REPLACE "d" "" wxWidgets_LIBRARIES "${wxWidgets_LIBRARIES}")
-
-#    message(STATUS "wxWidgets Libraries before: ${wxWidgets_LIBRARIES}")
-#    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-#        string(REGEX MATCHALL "optimized(.*?)l" wxWidgets_Release_LIBRARIES ${wxWidgets_LIBRARIES} )
-#        string(REPLACE "optimized" "debug" wxWidgets_Release_LIBRARIES "${wxWidgets_Debug_LIBRARIES}")
-#        message(STATUS "wxWidgets Release Libraries: ${wxWidgets_Release_LIBRARIES}")
-#        target_link_libraries(lk_sandbox lk ${wxWidgets_Debug_LIBRARIES})
-#    else()
-#        target_link_libraries(lk_sandbox lk ${wxWidgets_LIBRARIES})
-#    endif()      
-
-#set(input_string "This is string1 content between string2 and then more text.")
-#set(start_string "string1")
-#set(end_string "string2")
-
-# Construct the regex pattern
-# Note the need to escape backslashes if you have special regex characters
-# within your start_string or end_string that need to be treated literally.
-#set(regex_pattern "${start_string}(.*?)${end_string}")
-
-#string(REGEX MATCHALL "${regex_pattern}" matches ${input_string})
-
-#foreach(match ${matches})
-#    message("Matched substring: ${match}")
-#endforeach()
-#    string(REPLACE "debug" "optimized" wxWidgets_LIBRARIES "${wxWidgets_LIBRARIES}")
-
-#    target_link_libraries(lk_sandbox lk wxWidgets::wxWidgets)
-#    target_link_libraries(lk_sandbox lk ${wxWidgets_LIBRARIES})
-
-#    get_target_property(DEBUG_LINK_LIBS lk_sandbox LINK_LIBRARIES)
-#    message("Debug Link Libraries for lk_sandbox: $<${DEBUG_LINK_LIBS}>")
-#    message("Debug Link Libraries for lk_sandbox: ${DEBUG_LINK_LIBS}")
-#foreach(lib ${DEBUG_LINK_LIBS})
-#    string(FIND ${lib} "NOT" INDEX)
-#    string(FIND ${lib} "<" INDEX2)
-#    if ((INDEX GREATER_EQUAL 0 OR INDEX2 LESS 0) AND (NOT ${lib} STREQUAL "lk"))
-#        string(REPLACE "$<$<NOT:$<CONFIG:DEBUG>>:" "" lib "${lib}")
-#        string(REPLACE ">" "" lib "${lib}")
-#        message("lib: ${lib}")
-#        list(APPEND WX_LIBS_LIST ${lib})
-#    endif()
-#endforeach()
-#    string(REPLACE "$<$<NOT:$<CONFIG:DEBUG>>:" "" DEBUG_LINK_LIBS "${DEBUG_LINK_LIBS}")
-#    string(REPLACE "$<$<CONFIG:DEBUG>>:" "" DEBUG_LINK_LIBS "${DEBUG_LINK_LIBS}")
-#    string(REPLACE ">" "" DEBUG_LINK_LIBS "${DEBUG_LINK_LIBS}")
-#    message("Link Libraries for lk_sandbox: ${DEBUG_LINK_LIBS}")
-
-#message("All wxWidgets: " ${wxWidgets_LIBRARIES})
-#set(FOUND "false")
-#foreach(lib ${wxWidgets_LIBRARIES})
-#    string(FIND ${lib} "optimized" INDEX)
-#    string(FIND ${lib} "debug" INDEX2)
-#    string(FIND ${lib} "wxWidgets" INDEX3)
-#    if (INDEX GREATER_EQUAL 0) # skip once
-#        set(FOUND "true")
-#        continue()
-#    elseif((INDEX2 LESS 0) AND (INDEX3 LESS 0))
-#        set(FOUND "true")
-#    endif()
-#    if (${FOUND} STREQUAL "true")
-#        set(FOUND "false")
-#        message("lib: ${lib}")
-#        list(APPEND WX_LIBS_LIST ${lib})
-#    endif()
-#endforeach()
-
-#    list(JOIN WX_LIBS_LIST ";" WX_LIBS)
-#    message("Link Libraries for lk_sandbox: ${WX_LIBS}")
-    target_link_libraries(lk_sandbox lk ${wxWidgets_LIBRARIES})
+    target_link_libraries(lk_sandbox ${wxWidgets_LIBRARIES})
 
 endif()
