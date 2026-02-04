@@ -92,7 +92,9 @@ if (UNIX)
 #    find_package(wxWidgets REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base scintilla)
 endif ()
 
-include(${wxWidgets_USE_FILE})
+if (wxWidgets_FOUND)
+    include(${wxWidgets_USE_FILE})
+endif ()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${wxWidgets_CXX_FLAGS}")
 
 
