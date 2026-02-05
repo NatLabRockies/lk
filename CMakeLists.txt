@@ -47,7 +47,7 @@ set(LK_SRC
 #
 #####################################################################################################################
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 if (MSVC)
     add_compile_options(/W3 /wd4996 /MP)
@@ -87,9 +87,9 @@ if (UNIX)
         set(wxWidgets_CONFIG_EXECUTABLE $ENV{WXMSW3}/bin/wx-config)
         find_package(wxWidgets QUIET REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base)
     endif ()
-#else ()
-#    set(wxWidgets_ROOT_DIR $ENV{WXMSW3})
-#    find_package(wxWidgets REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base scintilla)
+else ()
+    set(wxWidgets_ROOT_DIR $ENV{WXMSW3})
+    find_package(wxWidgets REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base scintilla)
 endif ()
 
 if (wxWidgets_FOUND)
