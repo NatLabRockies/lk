@@ -47,7 +47,11 @@ set(LK_SRC
 #
 #####################################################################################################################
 
-set(CMAKE_CXX_STANDARD 17)
+if(MSVC)
+  set(CMAKE_CXX_STANDARD 20)
+else()
+  set(CMAKE_CXX_STANDARD 17)
+endif()
 
 if (MSVC)
     add_compile_options(/W3 /wd4996 /MP)
@@ -57,7 +61,6 @@ if (MSVC)
         set(${flag_var} "${${flag_var}} /D_DEBUG" CACHE STRING "compile flags" FORCE)
     endforeach ()
 else (MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
     if (APPLE)
         add_compile_options( -fno-common)
