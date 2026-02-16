@@ -1,7 +1,7 @@
 /*
 BSD 3-Clause License
 
-Copyright (c) Alliance for Sustainable Energy, LLC. See also https://github.com/NREL/lk/blob/develop/LICENSE 
+Copyright (c) Alliance for Energy Innovation, LLC. See also https://github.com/NREL/lk/blob/develop/LICENSE 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
