@@ -47,11 +47,7 @@ set(LK_SRC
 #
 #####################################################################################################################
 
-if(MSVC)
-  set(CMAKE_CXX_STANDARD 20)
-else()
-  set(CMAKE_CXX_STANDARD 17)
-endif()
+set(CMAKE_CXX_STANDARD 20)
 
 if (MSVC)
     add_compile_options(/W3 /wd4996 /MP)
