@@ -47,7 +47,7 @@ set(LK_SRC
 #
 #####################################################################################################################
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 
 if (MSVC)
     add_compile_options(/W3 /wd4996 /MP)
@@ -57,7 +57,6 @@ if (MSVC)
         set(${flag_var} "${${flag_var}} /D_DEBUG" CACHE STRING "compile flags" FORCE)
     endforeach ()
 else (MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
     if (APPLE)
         add_compile_options( -fno-common)
@@ -82,17 +81,19 @@ endif (MSVC)
 if (UNIX)
     if(EXISTS /usr/local/bin/wx-config-3)
         set(wxWidgets_CONFIG_EXECUTABLE /usr/local/bin/wx-config-3)
-        find_package(wxWidgets REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base)
+        find_package(wxWidgets QUIET REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base)
     else ()
         set(wxWidgets_CONFIG_EXECUTABLE $ENV{WXMSW3}/bin/wx-config)
-        find_package(wxWidgets REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base)
+        find_package(wxWidgets QUIET REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base)
     endif ()
 else ()
     set(wxWidgets_ROOT_DIR $ENV{WXMSW3})
-    find_package(wxWidgets REQUIRED qa webview aui richtext html propgrid adv net stc core base scintilla)
+    find_package(wxWidgets REQUIRED xrc stc richtext ribbon propgrid aui gl html qa adv core xml net base scintilla)
 endif ()
 
-include(${wxWidgets_USE_FILE})
+if (wxWidgets_FOUND)
+    include(${wxWidgets_USE_FILE})
+endif ()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${wxWidgets_CXX_FLAGS}")
 
 
@@ -151,5 +152,6 @@ if (NOT SAM_SKIP_TOOLS)
         target_link_libraries(lk_sandbox -ldl)
     endif ()
 
-    target_link_libraries(lk_sandbox lk ${wxWidgets_LIBRARIES})
+    target_link_libraries(lk_sandbox ${wxWidgets_LIBRARIES})
+
 endif()
