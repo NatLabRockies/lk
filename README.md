@@ -25,7 +25,7 @@ The documentation of the LK language is written in LaTeX:
 
 ## Contributing
 
-Please check out (https://github.com/NREL/lk/blob/develop/CONTRIBUTING.MD) to get started.  
+Please check out (https://github.com/NatLabRockies/lk/blob/develop/CONTRIBUTING.MD) to get started.  
 
 If you have found an issue with LK or would like to make a feature request, please let us know by adding a new issue on the [issues page](https://github.com/NREL/lk/issues).
 
@@ -33,4 +33,4 @@ If you would like to submit code to fix an issue or add a feature, you can use G
 
 ## License
 
-LK is licensed under a BDS-3-Clause [license](LICENSE.md).
+LK is licensed under a BSD-3-Clause [license](LICENSE.md).
